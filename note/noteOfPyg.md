@@ -49,5 +49,23 @@ def reset_parameter(self):
 ```
 * 重置所有可学习的参数[^nn.embedding]
 
+```python
+def forward(self,
+    head_index: Tensor,
+    rel_type: Tensor,
+    tail_index: Tensor,
+    ) -> Tensor:
+```
+This function is used to compute the score of a **Tuple(head, rel, tail)**
 
-[^nn.embedding]: nn.Embedding
+```python
+def loss(self,
+    head_index: Tensor,
+    rel_type: Tensor,
+    tail_index: Tensor
+    ) -> Tensor:
+```
+This function is used to compute the loss of a **Tuple(head, rel, tail)**
+
+
+[^nn.embedding]: nn.Embedding 其实只包含一个矩阵，设计成为`nn.Embedding`作为一个`nn.Module`是因为在`weight`之上添加了一些新特性
