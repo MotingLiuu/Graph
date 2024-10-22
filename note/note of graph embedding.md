@@ -55,7 +55,7 @@ $$
 ## Comment
 * 这篇文章的思路和word2vec完全相同，而且由于KG向量+关系可以自然而然地推断出另外一个向量，相对于bagOfWord更加直观。完全是word2vec思想的利用。
 * 没有像word2vec一样建立一个概率模型，而是简单粗暴地将embedding建模为k维向量（norm为1），接着优化embedding向量，减小loss。
-* loss的设计借鉴negativesampling，但word2vec中使用了sigmoid将向量的内积映射到了0~1值域上，使得norm对于loss的影响没有特别巨大。但是这篇论文中并没有相关的设计，只是单纯地限制了norm。
+* loss的设计借鉴negativesampling，但word2vec中使用了sigmoid将向量的内积映射到了0~1值域上，使得norm对于loss的影响没有特别巨大。但是这篇论文中并没有相关的设计，只是单纯地限制了norm。所以如果用上sigmoid函数，或者说利用范数无关的损失函数来进行训练会如何？
 
 
 # RotatE
