@@ -1,5 +1,5 @@
-* `test` folder including the code to train the model
-* `kge` floder including the code of the model
+* `test` folder includs the code to train the model
+* `kge` floder includs the code of the model
 
 **environment**
 ```shell
