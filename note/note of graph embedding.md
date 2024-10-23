@@ -58,6 +58,11 @@ $$
 * loss的设计借鉴negativesampling，但word2vec中使用了sigmoid将向量的内积映射到了0~1值域上，使得norm对于loss的影响没有特别巨大。但是这篇论文中并没有相关的设计，只是单纯地限制了norm。所以如果用上sigmoid函数，或者说利用范数无关的损失函数来进行训练会如何？
 
 
+* The approach in this paper is exactly the same as that of word2vec, and since KG embeddings + relations can naturally infer another vector, it is more intuitive compared to bag-of-words. It is essentially a direct application of word2vec's idea.
+* Unlike word2vec, which builds a probabilistic model, this paper takes a more straightforward approach by modeling the embeddings as k-dimensional vectors (normalized to have unit norm), then optimizing the embedding vectors to minimize the loss.
+* The loss function design draws on negative sampling, but in word2vec, a sigmoid function is used to map the inner product of vectors to the range of 0 to 1, thus reducing the impact of the norm on the loss. However, this paper does not employ such a mechanism and only restricts the norm. So, how would the results change if we introduced a sigmoid function or trained the model with a norm-independent loss function?
+
+
 # RotatE
 Use **Hadamard** product to multiply the real and imaginary components of the head entity embedding by the **angle-based relation embedding**.[^1]resulting in a **2D rotation effect** within each unit. Each unit consists of two elements representing the real and imaginary components.[^2]For example, an entity embedding with 500 dimensions consists of 250 units. The resulting vectors in each unit are then concatenated to form the tail entity embedding.
 #
