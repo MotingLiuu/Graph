@@ -110,4 +110,31 @@ $$
 
 ## Graph Level Feature
 * Kernel method
+* Graph kernels: Measure similarity between two graph
+    * Goal: Design graph feature vector $\phi(G)$
+    * Key idea: BOW for a graph
 
+* Graphlet Features
+    * color refinement
+
+# Lecture 3 Node Embedding
+
+* Graph Representation Learning
+
+    Goal: learning task-independent feature ($similaritu(u, v)\approx Z_v^TZ_u $)
+    ![alt text](image-10.png)
+    * Encoder is just a look-up
+        * define Node Similarity(random walk...)
+        * **Random walk**
+        ![alt text](image-11.png)
+        ![alt text](image-12.png)
+        ![alt text](image-13.png)
+        ![alt text](image-14.png)
+        to simplify the computation, using Negative sampling
+        ![alt text](image-15.png)
+        In all,
+        1. run **short fixed-length** random walks
+        2. for each node $\mu$ collect $N_R(\mu)$, the multiset of nodes visited on random walks starting from $\mu$
+        3.Optimize embeddings using Stochastic Gradient Denscent
+        * **Node2vec**
+        

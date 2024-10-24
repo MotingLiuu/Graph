@@ -73,3 +73,47 @@ Use **Hadamard** product to multiply the real and imaginary components of the he
 [^ideaFromWord2vec]: The idea of **TransE** is from **Word2vec**. 完全照抄
 [^initializeE]: sample from a uniform distribution $e \sim uniform(-\frac{6}{\sqrt{k}}, \frac{6}{\sqrt{k}})$ 每个实体和关系会被表示成一个从均匀分布中抽取的k维向量
 [^lossFunction]: This method, sampling some negtive samples to get the loss, is similar to **negtive sampleing** in word2vec. 论文中提到要将embedding的norm限制为1，否则训练的时候会让负样本相关的norm变大，从而导致损失函数下降。对比word2vec论文中使用negativeSampling的损失函数$Loss_{neg}(v_c,o,U)=-log(\sigma(\mu_o^Tv_c))-\sum_{k=1}^K {log(\sigma(-\mu_k^Tv_c))}$,发现这里使用了sigmoid这个函数，不容易计算导数，而且可以将内积映射到-1~1的值域上，从而使得norm对于loss没有很大的影响（两个向量保持夹角相同，调整向量的norm）。
+
+# Knowledge Graph Embedding Compression
+## Abstract
+Representing each entity in the KG as **a vector of discrete codes** and then composes the embeddings from these codes. Replace the traditional KG embedding layer by representing each entity in the KG with a K-way D dimensional code(**KD code**).
+用离散编码组成的vector（KD code）？
+**Discretization** and **reverse-discretization** function are leart end-to-end.
+两个阶段，一个离散化，一个逆离散化。
+Inherent discreteness of the representation learning problem.
+解决离散表示学习固有的问题（We tackle these issues by resorting to the straight-through estimator (Bengio
+ et al., 2013) or the tempering softmax (Maddison et al., 2016; Jang et al., 2016) and using guidance from existing KG embeddings to smoothly guide learning of the discrete representations.）
+
+ ## Discrete Representation Learning
+ **Representing each symbol $v$ in the vocabulary as a discrete vector $Z_v=[Z_v^{(1)},...,Z_v^{(D)}]$
+Discrete representation learning approaches (van den Oord et al., 2017; Chen et al.,2018; Chen and Sun, 2019). 
+
+## Discrete KG Representation Learning
+Define a **quantization function** $Q:R^d \to R^d$, which takes raw KG embeddings and produces their quantized representation. $Q = D \circ R$ is composed of two functions:
+   1. **A discretization function** $D: R^{d_e} \to Z^D$ (vector quantization)
+   2. **A reverse-discretization function** $R: Z^D \to R^{d_e}$ (codebook learning)
+During **training**, both $D$ and $R$ are learned. Then every entity in the KG is represented by a KD code via applying the discretization function $D$ to save space(compression). 
+During **testing/inference** stage, the reverse-discretization function $R$ is used to decode the KD codes into regular embedding vectors.
+
+### Discretization Function $D$
+Map continuous **KD embedding** vectors into **KD code**. 
+Model the discretization function using nearest neighbor search(Cayton, 2008). Given continuous KG embeddings $\{ e_i|i=1...n_e\}$ as query vectors, we define a set of **K** key vectors $\{K_k|k=1...K\}$ where $k_k^{(i)} \in R^{K\times d_e/D}, j= 1...D$
+
+Partition the query and key vectors into $D$ partitions where each partition corresponds one of the $D$ discrete codes $-e_i^{(j)} \in R^{K\times d_e /D}$ and $k_k^{(j)} \in R^{K\times d_e /D}, j=1...D$
+
+**Vector Quantization(VQ)**
+$j^{th}$ discrete code of $i^{th}$ entity $z^{(j)}_i$ can be computed by calculating distances between the corresponding query partition $e_i^{(j)}$ and various corresponding key vector partitions $\{ K_k^{(j)}\}$
+$$
+Z_i^{(j)} == argmin_k \ dist(e_i^{(j)}, K_k^{(j)})
+$$
+in the experiment
+$$
+dist(a, b) = ||a - b||^2_2
+$$
+use the straight-through estimator to compute a pseudo gradient.(ben-gio et al., 2013)
+
+**Tempering Softmax(Ts)**
+continuous relaxation of $Z_i^{(j)} == argmin_k \ dist(e_i^{(j)}, K_k^{(j)})$ using TS(Maddison son et al. 2016; jang et al.,2016).
+$$
+Z_i^{(j)} == argmax_k \frac{exp(<e_i^{(j)}, k_k^{(j)}>/r)}{\sum_{k'}exp(<e_i^{(j)},k_{k'}^{(j)}>/r)}
+$$
