@@ -117,3 +117,4 @@ continuous relaxation of $Z_i^{(j)} == argmin_k \ dist(e_i^{(j)}, K_k^{(j)})$ us
 $$
 Z_i^{(j)} == argmax_k \frac{exp(<e_i^{(j)}, k_k^{(j)}>/r)}{\sum_{k'}exp(<e_i^{(j)},k_{k'}^{(j)}>/r)}
 $$
+The function still carries an inherent non-differentiability. Hence, relax the above and compute probability vectors $\widetilde{z}_i^{(j)}$ which represent the probability distribution of the $j^{th}$ dimension of the discrete code fo the $i^{th}$ entity taking a particular value(say k).
